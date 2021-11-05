@@ -15,18 +15,17 @@ const rl = readline.createInterface({ input, writableStream });
 
 stdout.write(WELCOME_PHRASE);
 
-
-
 rl.on('line', (line) => {
   const textLine = line.toString();
   if (textLine.trim() === EXIT) {
-    stdout.write(BYE_PHRASE);
+
     process.exit();
-    // rl.close();
+
   }
   writableStream.write(textLine + '\n');
 });
 
-rl.on('close', () => {
-  stdout.write(BYE_PHRASE);
+process.on('exit', () => stdout.write(BYE_PHRASE));
+process.on('SIGINT', () => {
+  process.exit();
 });
