@@ -1,12 +1,18 @@
-const fs = require('fs');
+const { open } = require('fs/promises');
 const path = require('path');
-const { stdout } = require('process');
 
-const pathToTextFile = path.join(__dirname, 'text.txt');
+async function readfile() {
+  const pathToTextFile = path.join(__dirname, 'text.txt');
 
-let readableStream = fs.createReadStream(
-  pathToTextFile,
-  'utf8'
-);
+  let filehandle;
+  try {
+    filehandle = await open(pathToTextFile);
+    const text = await filehandle.readFile('utf8');
 
-readableStream.pipe(stdout);
+    console.log(text);
+  } finally {
+    await filehandle?.close();
+  }
+}
+
+readfile();
